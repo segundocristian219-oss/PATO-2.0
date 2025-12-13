@@ -193,11 +193,6 @@ if (m.isGroup) {
     }
 }
 
-const ___dirname = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "plugins"
-)
-
 const prefixes = Array.isArray(global.prefix)
   ? global.prefix
   : [global.prefix]
@@ -210,7 +205,6 @@ const plugin = global.plugins[name]
 if (!plugin) continue
 if (plugin.disabled) continue
 if (!isCommand && typeof plugin.all !== "function") continue
-const __filename = join(___dirname, name)
 if (typeof plugin.all === "function") {
 try {
 await plugin.all.call(this, m, {
