@@ -23,7 +23,7 @@ async function reportError(e) {
 await m.reply(`${msm} Ocurrió un error.`)
 console.log(e)
 }
-let thumb = icons
+let thumb = fkontak
 let pp, ch, q, mime, buffer, media, inviteUrlch, icono, imageBuffer
 
 switch (true) {     
