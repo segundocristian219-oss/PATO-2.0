@@ -101,32 +101,31 @@ export async function before(m, { conn, isAdmin, isBotAdmin }) {
   return true
 }
 
-let handler = async (m, { args, isAdmin, isOwner }) => {
+let handler = async (m, { isAdmin, isOwner }) => {
   if (!m.isGroup) return
   if (!isAdmin && !isOwner) return
 
   const chat = global.db.data.chats[m.chat]
+  const text = (m.text || '').toLowerCase().trim()
 
-  if (!args[0] || args[0] !== 'antilink') {
-    return m.reply(
-      '⚙️ AntiLink\n\n' +
-      '.on antilink\n' +
-      '.off antilink'
-    )
-  }
-
-  if (m.text.startsWith('.on')) {
+  if (text === '.on antilink') {
     chat.antiLink = true
     return m.reply('✅ AntiLink activado')
   }
 
-  if (m.text.startsWith('.off')) {
+  if (text === '.off antilink') {
     chat.antiLink = false
     return m.reply('❌ AntiLink desactivado')
   }
+
+  return m.reply(
+    '⚙️ AntiLink\n\n' +
+    '.on antilink\n' +
+    '.off antilink'
+  )
 }
 
-handler.customPrefix = /^(\.on|\.off)\s/i
+handler.customPrefix = /^\.on antilink$|^\.off antilink$/i
 handler.command = new RegExp()
 handler.group = true
 handler.admin = true
