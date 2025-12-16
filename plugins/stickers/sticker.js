@@ -58,7 +58,7 @@ const handler = async (msg, { conn, wa }) => {
     quoted: msg,
     ...global.rcanal
   }
-)
+}
 
   try {
     await conn.sendMessage(chatId, { react: { text: "🕒", key: msg.key } });
