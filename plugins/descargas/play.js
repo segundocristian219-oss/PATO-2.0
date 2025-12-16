@@ -343,3 +343,4 @@ export default async function handler(msg, { conn, text }) {
 handler.help = ["play <texto>"]
 handler.tags = ["descargas"]
 handler.command = ["play"]
+export default handler;
