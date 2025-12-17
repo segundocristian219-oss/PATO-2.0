@@ -10,7 +10,8 @@ import crypto from "crypto"
 const streamPipe = promisify(pipeline)
 
 const TMP_DIR = path.join(process.cwd(), "tmp")
-if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true })
+fs.rmSync(TMP_DIR, { recursive: true, force: true })
+fs.mkdirSync(TMP_DIR, { recursive: true })
 
 const API_BASE = (process.env.API_BASE || "https://api-sky.ultraplus.click").replace(/\/+$/, "")
 const API_KEY = process.env.API_KEY || "Russellxz"
@@ -23,6 +24,10 @@ let active = 0
 const queue = []
 const tasks = {}
 const cache = {}
+
+function saveCache() {
+  return true
+}
 
 function safeUnlink(f) {
   try { f && fs.existsSync(f) && fs.unlinkSync(f) } catch {}
@@ -291,12 +296,7 @@ export default async function handler(msg, { conn, text }) {
       const [type, isDoc] = map[choice]
 
       const cached = cache[job.videoUrl]?.files?.[type]
-      if (cached && fs.existsSync(cached)) {
-        await conn.sendMessage(
-          job.chatId,
-          { text: `⚡ Mandando desde cache: ${type}` },
-          { quoted: job.commandMsg }
-        )
+      if (cached && fs.existsSync(cached) && validFile(cached)) {
         await sendFile(conn, job, cached, isDoc, type, job.commandMsg)
         continue
       }
@@ -312,11 +312,6 @@ export default async function handler(msg, { conn, text }) {
         mediaUrl = await callYoutubeResolve(job.videoUrl, { type })
       } catch (e) {
         await conn.sendMessage(job.chatId, { text: `❌ Error API: ${e}` }, { quoted: job.commandMsg })
-        continue
-      }
-
-      if (!mediaUrl) {
-        await conn.sendMessage(job.chatId, { text: "❌ No se pudo obtener enlace." }, { quoted: job.commandMsg })
         continue
       }
 
