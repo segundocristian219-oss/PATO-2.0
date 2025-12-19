@@ -55,7 +55,7 @@ async function getSpotifyMp3(input) {
 function safeBaseFromTitle(title) {
   return String(title || "spotify")
     .slice(0, 70)
-    .replace(/[^A-Za-z0-9_-.]+/g, "_");
+    .replace(/[^A-Za-z0-9_.-]+/g, "_");
 }
 
 async function sendAudio(conn, job, asDocument, triggerMsg) {
