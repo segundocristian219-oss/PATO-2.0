@@ -122,7 +122,60 @@ gponly: false
 }} catch (e) {
 console.error(e)
 }
+
 if (typeof m.text !== "string") m.text = ""
+
+/* === STICKER → COMANDO GLOBAL === */
+try {
+  // Detectar sticker
+  const st = m.message?.stickerMessage || m.message?.ephemeralMessage?.message?.stickerMessage || null;
+  if (st) {
+    // Crear comandos.json si no existe
+    const jsonPath = './comandos.json';
+    if (!fs.existsSync(jsonPath)) fs.writeFileSync(jsonPath, '{}');
+
+    // Leer JSON
+    const map = JSON.parse(fs.readFileSync(jsonPath, 'utf-8') || '{}');
+
+    // Generar posibles hashes del sticker
+    const rawSha = st.fileSha256 || st.fileSha256Hash || st.filehash;
+    const candidates = [];
+    if (rawSha) {
+      if (Buffer.isBuffer(rawSha)) {
+        candidates.push(rawSha.toString("base64"));
+      } else if (ArrayBuffer.isView(rawSha)) {
+        candidates.push(Buffer.from(rawSha).toString("base64"));
+      } else if (typeof rawSha === "string") {
+        candidates.push(rawSha);
+      }
+    }
+
+    // Buscar comando asociado
+    let mapped = null;
+    for (const k of candidates) {
+      if (map[k] && map[k].trim()) {
+        mapped = map[k].trim();
+        break;
+      }
+    }
+
+    if (mapped) {
+      // Asegurar prefijo
+      const pref = (Array.isArray(global.prefixes) && global.prefixes[0]) || ".";
+      const injected = mapped.startsWith(pref) ? mapped : pref + mapped;
+
+      // Inyectar como m.text para que el handler lo vea como comando
+      m.text = injected.toLowerCase();
+
+      // Debug
+      console.log("✅ Sticker detectado, comando inyectado:", m.text);
+    }
+  }
+} catch (e) {
+  console.error("❌ Error Sticker→cmd:", e);
+}
+/* === FIN STICKER → COMANDO === */
+
 const user = global.db.data.users[m.sender]
 try {
 const actual = user.name || ""
@@ -181,7 +234,7 @@ if (m.isGroup) {
     }
 }
 
-const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "./plugins")
+const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), "plugins")
 for (const name in global.plugins) {
 const plugin = global.plugins[name]
 if (!plugin) continue
