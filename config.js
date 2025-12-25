@@ -14,12 +14,12 @@ global.prems = []
 
 global.emoji = '📎'
 global.emoji2 = '🏞️'
-global.namebot = 'SHADOW BOT'
-global.botname = 'SHADOW BOT'
-global.banner = 'https://files.catbox.moe/igdrbi.jpg'
-global.packname = 'SHADOW BOT'
-global.author = '𝖣𝖾𝗌𝖺𝗋𝗅𝗅𝖺𝖽𝗈 𝗉𝗈𝗋 HERNANDEZ'
-global.sessions = 'SHADOW BOT'
+global.namebot = '𝐏𝐀𝐓𝐎 𝐁𝐎𝐓'
+global.botname = '𝐏𝐀𝐓𝐎 𝐁𝐎𝐓'
+global.banner = 'https://cdn.russellxz.click/d479223a.jpeg'
+global.packname = '𝐏𝐀𝐓𝐎 𝐁𝐎𝐓'
+global.author = '𝖣𝖾𝗌𝖺𝗋𝗅𝗅𝖺𝖽𝗈 𝗉𝗈𝗋 𝐇𝐄𝐑𝐍𝐀𝐍𝐃𝐄𝐙'
+global.sessions = '𝐏𝐀𝐓𝐎 𝐁𝐎𝐓'
 
 global.APIs = {
 sky: 'https://api-sky.ultraplus.click',
